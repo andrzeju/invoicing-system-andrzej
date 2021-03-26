@@ -1,13 +1,22 @@
 package pl.futurecollars.invocing;
 
+import pl.futurecollars.invocing.db.Database;
+import pl.futurecollars.invocing.db.InMemoryDatabase;
+import pl.futurecollars.invocing.model.Invoice;
+import pl.futurecollars.invocing.service.InvoiceService;
+
 public class App {
 
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+
+        Database db = new InMemoryDatabase();
+
+        InvoiceService invoiceService = new InvoiceService(db);
+
+        Invoice invoice = new Invoice();
+        invoiceService.create(invoice);
+
     }
 }
 
