@@ -20,7 +20,7 @@ public class InMemoryDatabase implements Database {
 
     @Override
     public Optional<Invoice> getById(int id) {
-        return Optional.empty();
+        return Optional.ofNullable(invoiceInMemoryDatabase.get(id));
     }
 
     @Override
