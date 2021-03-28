@@ -2,7 +2,6 @@ package pl.futurecollars.invocing.model;
 
 import java.time.LocalDate;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
