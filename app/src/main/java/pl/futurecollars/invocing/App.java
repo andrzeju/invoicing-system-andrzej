@@ -1,8 +1,8 @@
 package pl.futurecollars.invocing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.File;
 import java.io.IOException;
@@ -27,19 +27,20 @@ public class App {
         Company buyer = new Company("5213861303", "ul. Bukowińska 24d/7 02-703 Warszawa, Polska", "iCode Trust Sp. z o.o");
         Company seller = new Company("552-168-66-00", "32-005 Niepolomice, Nagietkowa 19", "Piotr Kolacz Development");
 
-        List<InvoiceEntry> products = List.of(new InvoiceEntry("Programming course", BigDecimal.valueOf(10000), BigDecimal.valueOf(2300), Vat.VAT_23));
+        List<InvoiceEntry> products =
+            List.of(new InvoiceEntry("Programming course", BigDecimal.valueOf(10000), BigDecimal.valueOf(2300), Vat.VAT_23));
 
         Invoice invoice = new Invoice(LocalDate.now(), buyer, seller, products);
 
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             mapper.registerModule(new JavaTimeModule());
             String objectAsJson = mapper.writeValueAsString(List.of(invoice));
             mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             System.out.println(objectAsJson);
-            mapper.writeValue(new File("invoice.json"), invoice);
+            mapper.writeValue(new File("invoice.yaml"), invoice);
 
-            Invoice invoiceFromFile = mapper.readValue(new File("invoice.json"), Invoice.class);
+            Invoice invoiceFromFile = mapper.readValue(new File("invoice.yaml"), Invoice.class);
             System.out.println("Reading from file:");
             System.out.println(invoiceFromFile);
         } catch (IOException e) {
