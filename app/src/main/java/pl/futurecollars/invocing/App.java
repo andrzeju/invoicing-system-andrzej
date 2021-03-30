@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
+import pl.futurecollars.invocing.config.Config;
 import pl.futurecollars.invocing.db.Database;
 import pl.futurecollars.invocing.db.file.FileBasedDatabase;
 import pl.futurecollars.invocing.db.file.IdService;
@@ -17,15 +18,12 @@ import pl.futurecollars.invocing.utils.JsonService;
 
 public class App {
 
-    public static final String DATABASE_LOCATION = "db/invoices.txt";
-    public static final String ID_FILE_LOCATION = "db/id.txt";
-
     public static void main(String[] args) {
 
         FilesService filesService = new FilesService();
-        IdService idService = new IdService(Path.of(ID_FILE_LOCATION), filesService);
+        IdService idService = new IdService(Path.of(Config.ID_FILE_LOCATION), filesService);
         JsonService jsonService = new JsonService();
-        Database db = new FileBasedDatabase(Path.of(DATABASE_LOCATION), idService, filesService, jsonService);
+        Database db = new FileBasedDatabase(Path.of(Config.DATABASE_LOCATION), idService, filesService, jsonService);
 
         InvoiceService service = new InvoiceService(db);
 
