@@ -2,6 +2,7 @@ package pl.futurecollars.invocing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class App {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             String objectAsJson = mapper.writeValueAsString(List.of(invoice));
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             System.out.println(objectAsJson);
             mapper.writeValue(new File("invoice.json"), invoice);
 
