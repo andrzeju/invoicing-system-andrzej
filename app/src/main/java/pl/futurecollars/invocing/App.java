@@ -1,27 +1,32 @@
 package pl.futurecollars.invocing;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import pl.futurecollars.invocing.db.Database;
-import pl.futurecollars.invocing.db.InMemoryDatabase;
+import pl.futurecollars.invocing.db.file.FileBasedDatabase;
+import pl.futurecollars.invocing.db.file.IdService;
 import pl.futurecollars.invocing.model.Company;
 import pl.futurecollars.invocing.model.Invoice;
 import pl.futurecollars.invocing.model.InvoiceEntry;
 import pl.futurecollars.invocing.model.Vat;
 import pl.futurecollars.invocing.service.InvoiceService;
+import pl.futurecollars.invocing.utils.FilesService;
+import pl.futurecollars.invocing.utils.JsonService;
 
 public class App {
 
+    public static final String DATABASE_LOCATION = "db/invoices.txt";
+    public static final String ID_FILE_LOCATION = "db/id.txt";
+
     public static void main(String[] args) {
 
-        Database db = new InMemoryDatabase();
+        FilesService filesService = new FilesService();
+        IdService idService = new IdService(Path.of(ID_FILE_LOCATION), filesService);
+        JsonService jsonService = new JsonService();
+        Database db = new FileBasedDatabase(Path.of(DATABASE_LOCATION), idService, filesService, jsonService);
+
         InvoiceService service = new InvoiceService(db);
 
         Company buyer = new Company("5213861303", "ul. Bukowińska 24d/7 02-703 Warszawa, Polska", "iCode Trust Sp. z o.o");
@@ -31,21 +36,6 @@ public class App {
             List.of(new InvoiceEntry("Programming course", BigDecimal.valueOf(10000), BigDecimal.valueOf(2300), Vat.VAT_23));
 
         Invoice invoice = new Invoice(LocalDate.now(), buyer, seller, products);
-
-        try {
-            ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-            mapper.registerModule(new JavaTimeModule());
-            String objectAsJson = mapper.writeValueAsString(List.of(invoice));
-            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            System.out.println(objectAsJson);
-            mapper.writeValue(new File("invoice.yaml"), invoice);
-
-            Invoice invoiceFromFile = mapper.readValue(new File("invoice.yaml"), Invoice.class);
-            System.out.println("Reading from file:");
-            System.out.println(invoiceFromFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         int id = service.save(invoice);
 
