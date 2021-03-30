@@ -1,5 +1,10 @@
 package pl.futurecollars.invocing;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +29,20 @@ public class App {
         List<InvoiceEntry> products = List.of(new InvoiceEntry("Programming course", BigDecimal.valueOf(10000), BigDecimal.valueOf(2300), Vat.VAT_23));
 
         Invoice invoice = new Invoice(LocalDate.now(), buyer, seller, products);
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            String objectAsJson = mapper.writeValueAsString(List.of(invoice));
+            System.out.println(objectAsJson);
+            mapper.writeValue(new File("invoice.json"), invoice);
+
+            Invoice invoiceFromFile = mapper.readValue(new File("invoice.json"), Invoice.class);
+            System.out.println("Reading from file:");
+            System.out.println(invoiceFromFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         int id = service.save(invoice);
 
