@@ -68,7 +68,7 @@ jacocoTestCoverageVerification {
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: 'pl/futurecollars/invocing/controller/**')
+            fileTree(dir: it, exclude: 'pl/futurecollars/invoicing/controller/**')
         }))
     }
 }
