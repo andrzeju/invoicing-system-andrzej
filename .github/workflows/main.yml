@@ -30,11 +30,13 @@ jobs:
         with:
           java-version: 14
       - name: Check test coverage
-        run: ./gradlew jacocoTestCoverageVerification
+        run: ./gradlew check
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    needs:
+      - verify-test-coverage
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
