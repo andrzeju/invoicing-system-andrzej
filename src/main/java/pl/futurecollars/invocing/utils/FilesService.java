@@ -9,11 +9,11 @@ import java.util.List;
 public class FilesService {
 
     public void appendLineToFile(Path path, String line) throws IOException {
-        Files.write(path, (line + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+        Files.writeString(path, line + System.lineSeparator(), StandardOpenOption.APPEND);
     }
 
     public void writeToFile(Path path, String line) throws IOException {
-        Files.write(path, line.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+        Files.writeString(path, line, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     public void writeLinesToFile(Path path, List<String> lines) throws IOException {
