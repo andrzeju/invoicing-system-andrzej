@@ -14,16 +14,20 @@ import pl.futurecollars.invoicing.utils.JsonService;
 @Configuration
 public class DatabaseConfiguration {
 
+    public static final String TEXT_FILE_SUFFIX = ".txt";
+    public static final String PREFIX = "prefix";
+    public static final String ID_PREFIX = "idPrefix";
+
     @Bean
     @Primary
     public FileBasedDatabase fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
-        Path filePath = Files.createTempFile("prefix", ".txt");
+        Path filePath = Files.createTempFile(PREFIX, TEXT_FILE_SUFFIX);
         return new FileBasedDatabase(filePath, idService, filesService, jsonService);
     }
 
     @Bean
     public IdService idService(FilesService filesService) throws IOException {
-        Path filePath = Files.createTempFile("idPrefix", ".txt");
+        Path filePath = Files.createTempFile(ID_PREFIX, TEXT_FILE_SUFFIX);
         return new IdService(filePath, filesService);
     }
 
