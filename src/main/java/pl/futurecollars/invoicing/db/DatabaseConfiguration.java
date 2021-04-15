@@ -19,7 +19,6 @@ public class DatabaseConfiguration {
     public static final String ID_PREFIX = "idPrefix";
 
     @Bean
-    @Primary
     public FileBasedDatabase fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
         Path filePath = Files.createTempFile(PREFIX, TEXT_FILE_SUFFIX);
         return new FileBasedDatabase(filePath, idService, filesService, jsonService);

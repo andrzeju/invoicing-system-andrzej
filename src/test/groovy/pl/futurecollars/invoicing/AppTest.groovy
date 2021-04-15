@@ -3,18 +3,20 @@
  */
 package pl.futurecollars.invoicing
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import pl.futurecollars.invoicing.service.InvoiceService
 import spock.lang.Specification
 
+@SpringBootTest
 class AppTest extends Specification {
 
-    def "dummy main method test"() {
-        setup:
-        def app = new App()
+    @Autowired
+    private InvoiceService invoiceService
 
-        when:
-        def result = app.main()
+    def "invoice service is correctly created and autowired"() {
 
-        then:
-        result == null
+        expect:
+        invoiceService
     }
 }
