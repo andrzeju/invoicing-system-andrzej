@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import pl.futurecollars.invoicing.db.file.FileBasedDatabase;
 import pl.futurecollars.invoicing.db.file.IdService;
 import pl.futurecollars.invoicing.utils.FilesService;
@@ -18,9 +19,16 @@ public class DatabaseConfiguration {
     public static final String ID_PREFIX = "idPrefix";
 
     @Bean
-    public FileBasedDatabase fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
+    @Profile("prod")
+    public Database fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
         Path filePath = Files.createTempFile(PREFIX, TEXT_FILE_SUFFIX);
         return new FileBasedDatabase(filePath, idService, filesService, jsonService);
+    }
+
+    @Bean
+    @Profile("dev")
+    public Database inMemoryDatabase() {
+        return new InMemoryDatabase();
     }
 
     @Bean
