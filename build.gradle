@@ -16,6 +16,13 @@ repositories {
     jcenter()
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(15)
+        vendor = JvmVendorSpec.ADOPTOPENJDK
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // Use the latest Groovy version for Spock testing
