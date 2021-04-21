@@ -1,0 +1,15 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+server:
+  port: 8080
+invoicing:
+  database: file
+  database.directory: invoicing
+  database.file: invoices.txt
+  database.idFile: id.txt
+logging:
+  level:
+    pl:
+      futurecollars:
+        invoicing: DEBUG
