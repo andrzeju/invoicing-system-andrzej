@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("tax")
-@Api(tags = {"tax-controller"})
+@RequestMapping("taxes")
+@Api(tags = {"taxes-controller"})
 public interface TaxCalculationApi {
 
     @ApiOperation(value = "Calculate taxes and ingredients: income, costs, vat")

@@ -60,6 +60,7 @@ class InvoiceControllerStepwiseTest extends Specification {
                                 .content(invoiceAsJson)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
+                        .andDo(print())
                         .andExpect(status().isOk())
                         .andReturn()
                         .response
@@ -120,6 +121,7 @@ class InvoiceControllerStepwiseTest extends Specification {
                         .content(invoiceAsJson)
                         .contentType(MediaType.APPLICATION_JSON)
         )
+                .andDo(print())
                 .andExpect(status().isNoContent())
     }
 
