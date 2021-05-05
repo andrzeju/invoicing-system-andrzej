@@ -15,7 +15,6 @@ import spock.lang.Stepwise
 import java.time.LocalDate
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @AutoConfigureMockMvc
@@ -60,7 +59,6 @@ class InvoiceControllerStepwiseTest extends Specification {
                                 .content(invoiceAsJson)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                        .andDo(print())
                         .andExpect(status().isOk())
                         .andReturn()
                         .response
@@ -121,7 +119,6 @@ class InvoiceControllerStepwiseTest extends Specification {
                         .content(invoiceAsJson)
                         .contentType(MediaType.APPLICATION_JSON)
         )
-                .andDo(print())
                 .andExpect(status().isNoContent())
     }
 
