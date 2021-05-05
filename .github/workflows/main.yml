@@ -25,8 +25,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Check test coverage
-        run: ./gradlew check
+      - name: Perform checks
+        run: ./gradlew check -i
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
