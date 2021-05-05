@@ -10,16 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.futurecollars.invoicing.db.file.FileBasedDatabase;
 import pl.futurecollars.invoicing.db.file.IdService;
+import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
 import pl.futurecollars.invoicing.utils.FilesService;
 import pl.futurecollars.invoicing.utils.JsonService;
 
 @Configuration
 @Slf4j
 public class DatabaseConfiguration {
-
-    public static final String TEXT_FILE_SUFFIX = ".txt";
-    public static final String PREFIX = "prefix";
-    public static final String ID_PREFIX = "idPrefix";
 
     @Value("${invoicing.database.directory}")
     private String databaseDirectory;

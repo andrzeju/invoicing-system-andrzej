@@ -5,6 +5,8 @@ buildscript {
         spockVersion = '1.3-groovy-2.5'
         springBootVersion = '2.4.4'
         springDepsManagement = '1.0.11.RELEASE'
+        springFoxStarterVersion = '3.0.0'
+        springFoxUiVersion = '2.9.2'
     }
 }
 plugins {
@@ -21,7 +23,6 @@ group = 'pl.futurecollars.invoicing'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
-    // Use JCenter for resolving dependencies.
     mavenCentral()
 }
 
@@ -39,6 +40,8 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "io.springfox:springfox-boot-starter:${springFoxStarterVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${springFoxUiVersion}"
 
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
