@@ -1,15 +1,15 @@
 package pl.futurecollars.invoicing.controller.taxes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.futurecollars.invoicing.service.TaxCalculationService;
 
 @RestController
-@RequestMapping("taxes")
-public class TaxCalculationController {
+public class TaxCalculationController implements TaxCalculationApi {
 
-    @GetMapping(produces = {"application/json;charset=UTF-8"})
+    private TaxCalculationService taxCalculationService;
+
+    @Override
     public TaxCalculationResult calculateTaxes(String taxIdentificationNumber) {
-        return null;
+        return taxCalculationService.calculateTaxes(taxIdentificationNumber);
     }
 }
