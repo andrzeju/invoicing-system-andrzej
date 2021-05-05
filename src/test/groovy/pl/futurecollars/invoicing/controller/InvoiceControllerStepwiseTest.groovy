@@ -16,6 +16,7 @@ import java.time.LocalDate
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -39,6 +40,7 @@ class InvoiceControllerStepwiseTest extends Specification {
         when:
         def response = mockMvc.perform(get("/invoices"))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andReturn()
                 .response
                 .contentAsString
