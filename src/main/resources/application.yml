@@ -4,7 +4,7 @@ spring:
 server:
   port: 8080
 invoicing:
-  database: file
+  database: memory
   database.directory: invoicing
   database.file: invoices.txt
   database.idFile: id.txt

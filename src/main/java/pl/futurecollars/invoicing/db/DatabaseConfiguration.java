@@ -20,7 +20,7 @@ public class DatabaseConfiguration {
 
     @ConditionalOnProperty(name = "invoicing.database", havingValue = "file")
     @Bean
-    public Database fileBasedDatabase(IdService idService, FilesService filesService,JsonService jsonService,
+    public Database fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService,
         @Value("${invoicing.database.directory}") String databaseDirectory,
         @Value("${invoicing.database.file}") String invoicesFile) throws IOException {
         Path databaseFilePath = Files.createTempFile(databaseDirectory, invoicesFile);
