@@ -18,21 +18,14 @@ import pl.futurecollars.invoicing.utils.JsonService;
 @Slf4j
 public class DatabaseConfiguration {
 
-    @Value("${invoicing.database.directory}")
-    private String databaseDirectory;
-
-    @Value("${invoicing.database.file}")
-    private String invoiceFile;
-
-    @Value("${invoicing.database.idFile}")
-    private String idFile;
-
-    @Bean
     @ConditionalOnProperty(name = "invoicing.database", havingValue = "file")
-    public Database fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService) throws IOException {
-        log.info("FileBased database created");
-        Path filePath = Files.createTempFile(databaseDirectory, invoiceFile);
-        return new FileBasedDatabase(filePath, idService, filesService, jsonService);
+    @Bean
+    public Database fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService,
+        @Value("${invoicing.database.directory}") String databaseDirectory,
+        @Value("${invoicing.database.file}") String invoicesFile) throws IOException {
+        Path databaseFilePath = Files.createTempFile(databaseDirectory, invoicesFile);
+        log.info("FileBased database created: " + databaseFilePath.toString());
+        return new FileBasedDatabase(databaseFilePath, idService, filesService, jsonService);
     }
 
     @Bean
@@ -43,9 +36,13 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public IdService idService(FilesService filesService) throws IOException {
-        Path filePath = Files.createTempFile(databaseDirectory, idFile);
-        return new IdService(filePath, filesService);
+    public IdService idService(
+        FilesService filesService,
+        @Value("${invoicing.database.directory}") String databaseDirectory,
+        @Value("${invoicing.database.idFile}") String idFile
+    ) throws IOException {
+        Path idFilePath = Files.createTempFile(databaseDirectory, idFile);
+        return new IdService(idFilePath, filesService);
     }
 
 }

@@ -15,11 +15,11 @@ import spock.lang.Stepwise
 import java.time.LocalDate
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 
 @AutoConfigureMockMvc
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Stepwise
 class InvoiceControllerStepwiseTest extends Specification {
 
@@ -40,6 +40,7 @@ class InvoiceControllerStepwiseTest extends Specification {
         when:
         def response = mockMvc.perform(get("/invoices"))
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andReturn()
                 .response
                 .contentAsString

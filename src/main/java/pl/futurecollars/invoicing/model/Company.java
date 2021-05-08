@@ -1,11 +1,15 @@
 package pl.futurecollars.invoicing.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Company {
 
     @ApiModelProperty(value = "Tax Identification Number", required = true, example = "555-555-55-55")
@@ -17,9 +21,4 @@ public class Company {
     @ApiModelProperty(value = "Company Name", required = true, example = "Google Inc.")
     private String name;
 
-    public Company(String taxIdentificationNumber, String address, String name) {
-        this.taxIdentificationNumber = taxIdentificationNumber;
-        this.address = address;
-        this.name = name;
-    }
 }

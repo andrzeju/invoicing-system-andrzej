@@ -1,4 +1,4 @@
-package pl.futurecollars.invoicing.controller;
+package pl.futurecollars.invoicing.controller.invoices;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
