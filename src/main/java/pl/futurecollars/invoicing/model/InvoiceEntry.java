@@ -1,5 +1,6 @@
 package pl.futurecollars.invoicing.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +13,23 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InvoiceEntry {
 
+    @ApiModelProperty(value = "Product/service description", required = true, example = "Dell X12 v3")
     private String description;
-    private BigDecimal price;
+
+    @ApiModelProperty(value = "Number of items", required = true, example = "85")
     private int quantity;
-    private BigDecimal vatValue;
+
+    @ApiModelProperty(value = "Product/service net price", required = true, example = "1857.15")
+    private BigDecimal price;
+
+    @ApiModelProperty(value = "Product/service tax value", required = true, example = "139.46")
+    @Builder.Default
+    private BigDecimal vatValue = BigDecimal.ZERO;
+
+    @ApiModelProperty(value = "Tax rate", required = true)
     private Vat vatRate;
+
+    @ApiModelProperty(value = "Car this expense is related to, empty if expense is not related to car")
+    private Car carRelatedExpense;
 
 }

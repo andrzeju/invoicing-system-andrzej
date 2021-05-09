@@ -7,10 +7,11 @@ import pl.futurecollars.invoicing.utils.FilesService
 import pl.futurecollars.invoicing.utils.JsonService
 
 import java.nio.file.Files
+import java.nio.file.Path
 
 class FileBasedDatabaseIntegrationTest extends AbstractDatabaseTest {
 
-    def dbPath
+    Path dbPath
 
     @Override
     Database getDatabaseInstance() {
@@ -38,5 +39,26 @@ class FileBasedDatabaseIntegrationTest extends AbstractDatabaseTest {
 
         then:
         2 == Files.readAllLines(dbPath).size()
+    }
+
+    def "RuntimeException thrown on IOException accessing the file"() {
+        given:
+        def idPath = File.createTempFile('ids', '.txt').toPath()
+        def db = new FileBasedDatabase(File.createTempFile('invoices', '.txt').toPath(),
+                new IdService(idPath, new FilesService()),  null, null)
+
+        when:
+        db.getAll()
+
+        then:
+        thrown(RuntimeException.class)
+
+        when:
+        db.getById(3)
+
+        then:
+        thrown(RuntimeException.class)
+
+
     }
 }
