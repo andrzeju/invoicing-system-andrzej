@@ -7,6 +7,7 @@ buildscript {
         springDepsManagement = '1.0.11.RELEASE'
         springFoxStarterVersion = '3.0.0'
         springFoxUiVersion = '2.9.2'
+        flywayVersion = '7.6.0'
     }
 }
 plugins {
@@ -39,7 +40,11 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+    runtimeOnly 'org.postgresql:postgresql:42.2.19'
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-jdbc"
     implementation "io.springfox:springfox-boot-starter:${springFoxStarterVersion}"
     implementation "io.springfox:springfox-swagger-ui:${springFoxUiVersion}"
 
