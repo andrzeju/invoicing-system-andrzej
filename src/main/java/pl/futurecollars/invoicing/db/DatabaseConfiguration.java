@@ -18,8 +18,8 @@ import pl.futurecollars.invoicing.utils.JsonService;
 @Slf4j
 public class DatabaseConfiguration {
 
-    @ConditionalOnProperty(name = "invoicing.database", havingValue = "file")
     @Bean
+    @ConditionalOnProperty(name = "invoicing.database", havingValue = "file")
     public Database fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService,
         @Value("${invoicing.database.directory}") String databaseDirectory,
         @Value("${invoicing.database.file}") String invoicesFile) throws IOException {
@@ -36,6 +36,7 @@ public class DatabaseConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "invoicing.database", havingValue = "file")
     public IdService idService(
         FilesService filesService,
         @Value("${invoicing.database.directory}") String databaseDirectory,

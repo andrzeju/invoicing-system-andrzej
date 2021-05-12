@@ -1,11 +1,13 @@
 package pl.futurecollars.invoicing.controller
 
 import org.springframework.http.MediaType
+import spock.lang.Unroll
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import static pl.futurecollars.invoicing.TestHelpers.invoice
 
+@Unroll
 class InvoiceControllerIntegrationTest extends AbstractControllerTest {
 
     def "empty array is returned when no invoices were added"() {
