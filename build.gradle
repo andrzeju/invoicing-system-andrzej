@@ -42,6 +42,7 @@ dependencies {
 
     runtimeOnly 'org.postgresql:postgresql:42.2.19'
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    runtimeOnly 'com.h2database:h2:1.4.200'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.springframework.boot:spring-boot-starter-jdbc"
@@ -68,6 +69,23 @@ test {
     finalizedBy jacocoTestReport // report is always generated after tests run
     finalizedBy jacocoTestCoverageVerification
 }
+
+task testWithFileDatabase(type: Test) {
+    systemProperty 'spring.profiles.active', 'file'
+}
+
+task testWithMemoryDatabase(type: Test) {
+    systemProperty 'spring.profiles.active', 'memory'
+}
+
+task testWithSqlDatabase(type: Test) {
+    systemProperty 'spring.profiles.active', 'sql'
+}
+
+check.dependsOn testWithFileDatabase
+check.dependsOn testWithMemoryDatabase
+//check.dependsOn testWithSqlDatabase
+
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
