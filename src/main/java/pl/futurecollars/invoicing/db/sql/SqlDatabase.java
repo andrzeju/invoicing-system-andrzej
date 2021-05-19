@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -19,7 +19,7 @@ import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.model.InvoiceEntry;
 import pl.futurecollars.invoicing.model.Vat;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class SqlDatabase implements Database {
 
     public static final String SELECT_QUERY = "select i.id, i.date, i.number, "
