@@ -20,7 +20,7 @@ public class Invoice {
     @ApiModelProperty(value = "Invoice number (assigned by user)", required = true, example = "2020/03/08/0000001")
     private String number;
 
-    @ApiModelProperty(value = "Date invoice was created", required = true)
+    @ApiModelProperty(value = "Date invoice was created", required = true, example = "2021-05-12")
     private LocalDate date;
 
     private Company buyer;
