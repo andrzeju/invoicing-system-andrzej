@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/invoices-jpa
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+invoicing:
+  database: jpa
