@@ -91,10 +91,15 @@ task testWithJpaDatabase(type: Test) {
     systemProperty 'spring.profiles.active', 'jpa'
 }
 
+task testWithJpaFlywayDatabase(type: Test) {
+    systemProperty 'spring.profiles.active', 'jpa-flyway'
+}
+
 check.dependsOn testWithFileDatabase
 check.dependsOn testWithMemoryDatabase
 check.dependsOn testWithSqlDatabase
 check.dependsOn testWithJpaDatabase
+check.dependsOn testWithJpaFlywayDatabase
 
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
