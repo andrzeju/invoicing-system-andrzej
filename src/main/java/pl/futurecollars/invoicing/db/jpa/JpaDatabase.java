@@ -29,7 +29,18 @@ public class JpaDatabase implements Database {
 
     @Override
     public Optional<Invoice> update(int id, Invoice updatedInvoice) {
-        return Optional.empty();
+        Optional<Invoice> invoice = getById(id);
+        if (invoice.isPresent()) {
+            Invoice savedInvoice = invoice.get();
+
+            updatedInvoice.setId(id);
+            updatedInvoice.getBuyer().setId(savedInvoice.getBuyer().getId());
+            updatedInvoice.getSeller().setId(savedInvoice.getSeller().getId());
+
+            invoiceRepository.save(updatedInvoice);
+        }
+
+        return invoice;
     }
 
     @Override

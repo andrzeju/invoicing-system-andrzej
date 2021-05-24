@@ -20,6 +20,10 @@ public interface Database {
 
     Optional<Invoice> delete(int id);
 
+    default void reset() {
+        getAll().forEach(invoice -> delete(invoice.getId()));
+    }
+
     default BigDecimal visit(Function<InvoiceEntry, BigDecimal> amountToSum,
                              Predicate<Invoice> invoiceSourcePredicate) {
         return getAll().stream()

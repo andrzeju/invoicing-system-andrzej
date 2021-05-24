@@ -7,9 +7,14 @@ import static pl.futurecollars.invoicing.TestHelpers.invoice
 abstract class AbstractDatabaseTest extends Specification {
 
     List<Invoice> invoices = (1..12).collect { invoice(it) }
-    Database database = getDatabaseInstance()
 
     abstract Database getDatabaseInstance()
+    Database database
+
+    def setup() {
+        database = getDatabaseInstance()
+        database.reset()
+    }
 
     def "should save invoices returning sequential id, invoice should have id set to correct value, get by id returns saved invoice"() {
         when:
@@ -19,7 +24,11 @@ abstract class AbstractDatabaseTest extends Specification {
         ids == (1..invoices.size()).collect()
         ids.forEach { assert database.getById(it).isPresent() }
         ids.forEach { assert database.getById(it).get().getId() == it }
-        ids.forEach { assert resetIds(database.getById(it).get()) == invoices.get(it - 1) }
+        ids.forEach {
+            def expectedInvoice = resetIds(invoices.get(it - 1))
+            def invoiceFromDb = resetIds(database.getById(it).get())
+            assert expectedInvoice.toString() == invoiceFromDb.toString()
+        }
     }
 
     def "get by id returns empty optional when there is no invoice with given id"() {
@@ -38,15 +47,20 @@ abstract class AbstractDatabaseTest extends Specification {
 
         expect:
         database.getAll().size() == invoices.size()
-        database.getAll().forEach { assert resetIds(it) == invoices.get(it.getId() - 1) }
+        database.getAll().eachWithIndex { Invoice invoice, int idx ->
+            assert resetIds(invoice).toString() == resetIds(invoices.get(idx)).toString()
+        }
 
         when:
-        database.delete(1)
+        def firstInvoiceId = database.getAll().get(0).getId()
+        database.delete(firstInvoiceId)
 
         then:
         database.getAll().size() == invoices.size() - 1
-        database.getAll().forEach { assert resetIds(it) == invoices.get(it.getId() - 1) }
-        database.getAll().forEach { assert it.getId() != 1 }
+        database.getAll().eachWithIndex { Invoice invoice, int idx ->
+            assert resetIds(invoice).toString() == resetIds(invoices.get(idx + 1)).toString()
+        }
+        database.getAll().forEach { assert it.getId() != firstInvoiceId }
     }
 
     def "can delete all invoices"() {
@@ -78,8 +92,14 @@ abstract class AbstractDatabaseTest extends Specification {
 
         then:
         def invoiceAfterUpdate = database.getById(originalInvoice.id).get()
-        resetIds(invoiceAfterUpdate) == expectedInvoice
-        resetIds(result.get()) == originalInvoice
+        def invoiceAfterUpdateAsString = resetIds(invoiceAfterUpdate).toString()
+        def expectedInvoiceAfterUpdateAsString = resetIds(expectedInvoice).toString()
+        invoiceAfterUpdateAsString == expectedInvoiceAfterUpdateAsString
+
+        and:
+        def invoiceBeforeUpdateAsString = resetIds(result.get()).toString()
+        def expectedInvoiceBeforeUpdateAsString = resetIds(originalInvoice).toString()
+        invoiceBeforeUpdateAsString == expectedInvoiceBeforeUpdateAsString
     }
 
     def "updating not existing invoice returns Optional.empty()"() {
@@ -90,6 +110,9 @@ abstract class AbstractDatabaseTest extends Specification {
     private static Invoice resetIds(Invoice invoice) {
         invoice.getBuyer().id = 0
         invoice.getSeller().id = 0
+        invoice.entries.forEach {
+            it.id = 0
+        }
         invoice
     }
 }

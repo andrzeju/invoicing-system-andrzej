@@ -43,7 +43,7 @@ public class InvoiceEntry {
     @ApiModelProperty(value = "Tax rate", required = true)
     private Vat vatRate;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @ApiModelProperty(value = "Car this expense is related to, empty if expense is not related to car")
     private Car carRelatedExpense;
 

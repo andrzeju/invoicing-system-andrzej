@@ -87,9 +87,14 @@ task testWithPostgreSqlDatabase(type: Test) { // only for local use
     systemProperty 'spring.profiles.active', 'sql-pg'
 }
 
+task testWithJpaDatabase(type: Test) {
+    systemProperty 'spring.profiles.active', 'jpa'
+}
+
 check.dependsOn testWithFileDatabase
 check.dependsOn testWithMemoryDatabase
 check.dependsOn testWithSqlDatabase
+check.dependsOn testWithJpaDatabase
 
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
