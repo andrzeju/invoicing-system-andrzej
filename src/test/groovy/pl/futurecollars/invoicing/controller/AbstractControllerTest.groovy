@@ -32,8 +32,8 @@ class AbstractControllerTest extends Specification {
         getAllInvoices().each { invoice -> deleteInvoice(invoice.id) }
     }
 
-    long addInvoiceAndReturnId(Invoice invoice) {
-        Long.valueOf(
+    int addInvoiceAndReturnId(Invoice invoice) {
+        Integer.valueOf(
                 mockMvc.perform(
                         post(INVOICE_ENDPOINT)
                                 .content(jsonService.toJson(invoice))

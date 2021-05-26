@@ -46,7 +46,7 @@ public class JpaDatabase implements Database {
     @Override
     public Optional<Invoice> delete(long id) {
         Optional<Invoice> invoice = getById(id);
-        invoice.ifPresent(invoiceRepository :: delete);
+        invoice.ifPresent(invoiceRepository::delete);
 
         return invoice;
     }

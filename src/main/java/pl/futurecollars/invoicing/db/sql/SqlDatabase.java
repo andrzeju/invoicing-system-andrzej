@@ -2,11 +2,8 @@ package pl.futurecollars.invoicing.db.sql;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import javax.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -87,7 +84,7 @@ public class SqlDatabase implements Database {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
                 .prepareStatement(
-                    "insert into car (registration_number, personal_use) values (?, ?);",
+                    "insert into car (registration, includingPersonalUse) values (?, ?);",
                     new String[] {"id"});
             ps.setString(1, car.getRegistration());
             ps.setBoolean(2, car.isIncludingPersonalUse());
@@ -124,10 +121,10 @@ public class SqlDatabase implements Database {
                     .price(response.getBigDecimal("price"))
                     .vatValue(response.getBigDecimal("vat_value"))
                     .vatRate(Vat.valueOf(response.getString("vat_rate")))
-                    .carRelatedExpense(response.getObject("registration_number") != null
+                    .carRelatedExpense(response.getObject("registration") != null
                         ? Car.builder()
-                        .registration(response.getString("registration_number"))
-                        .includingPersonalUse(response.getBoolean("personal_use"))
+                        .registration(response.getString("registration"))
+                        .includingPersonalUse(response.getBoolean("includingPersonalUse"))
                         .build()
                         : null)
                     .build());
