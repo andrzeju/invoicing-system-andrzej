@@ -1,21 +1,22 @@
 package pl.futurecollars.invoicing.db.mongo;
 
-import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
 import java.util.List;
 import java.util.Optional;
 import pl.futurecollars.invoicing.db.Database;
 import pl.futurecollars.invoicing.model.Invoice;
 
-public class MongoDatabase implements Database {
+public class MongoBasedDatabase implements Database {
 
-    private final MongoClient mongoClient;
+    private final MongoCollection<Invoice> mongoDatabase;
 
-    public MongoDatabase(MongoClient mongoClient) {
-        this.mongoClient = mongoClient;
+    public MongoBasedDatabase(MongoCollection<Invoice> mongoDatabase) {
+        this.mongoDatabase = mongoDatabase;
     }
 
     @Override
     public long save(Invoice invoice) {
+        mongoDatabase.insertOne(invoice);
         return 0;
     }
 

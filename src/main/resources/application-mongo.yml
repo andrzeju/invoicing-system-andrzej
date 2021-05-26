@@ -1,2 +1,4 @@
 invoicing:
   database: mongo
+  database.name: invoices
+  database.collection: invoices

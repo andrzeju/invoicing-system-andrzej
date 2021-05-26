@@ -1,5 +1,6 @@
 package pl.futurecollars.invoicing.db;
 
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,8 +16,9 @@ import pl.futurecollars.invoicing.db.file.IdService;
 import pl.futurecollars.invoicing.db.jpa.InvoiceRepository;
 import pl.futurecollars.invoicing.db.jpa.JpaDatabase;
 import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
-import pl.futurecollars.invoicing.db.mongo.MongoDatabase;
+import pl.futurecollars.invoicing.db.mongo.MongoBasedDatabase;
 import pl.futurecollars.invoicing.db.sql.SqlDatabase;
+import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.utils.FilesService;
 import pl.futurecollars.invoicing.utils.JsonService;
 
@@ -27,8 +29,8 @@ public class DatabaseConfiguration {
     @Bean
     @ConditionalOnProperty(name = "invoicing.database", havingValue = "file")
     public Database fileBasedDatabase(IdService idService, FilesService filesService, JsonService jsonService,
-        @Value("${invoicing.database.directory}") String databaseDirectory,
-        @Value("${invoicing.database.file}") String invoicesFile) throws IOException {
+                                      @Value("${invoicing.database.directory}") String databaseDirectory,
+                                      @Value("${invoicing.database.file}") String invoicesFile) throws IOException {
         Path databaseFilePath = Files.createTempFile(databaseDirectory, invoicesFile);
         log.info("FileBased database created: " + databaseFilePath.toString());
         return new FileBasedDatabase(databaseFilePath, idService, filesService, jsonService);
@@ -67,8 +69,15 @@ public class DatabaseConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "invoicing.database", havingValue = "mongo")
-    public Database mongoDatabase() {
-        return new MongoDatabase(MongoClients.create());
+    public Database mongoBasedDatabase(
+        @Value("${invoicing.database.name}") String databaseName,
+        @Value("${invoicing.database.collection}") String collectionName
+    ) {
+        MongoClient mongoClient = MongoClients.create();
+        return new MongoBasedDatabase(
+            mongoClient
+                .getDatabase(databaseName)
+                .getCollection(collectionName, Invoice.class));
     }
 
 }
