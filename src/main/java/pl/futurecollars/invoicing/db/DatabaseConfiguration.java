@@ -1,5 +1,6 @@
 package pl.futurecollars.invoicing.db;
 
+import com.mongodb.client.MongoClients;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import pl.futurecollars.invoicing.db.file.IdService;
 import pl.futurecollars.invoicing.db.jpa.InvoiceRepository;
 import pl.futurecollars.invoicing.db.jpa.JpaDatabase;
 import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
+import pl.futurecollars.invoicing.db.mongo.MongoDatabase;
 import pl.futurecollars.invoicing.db.sql.SqlDatabase;
 import pl.futurecollars.invoicing.utils.FilesService;
 import pl.futurecollars.invoicing.utils.JsonService;
@@ -61,6 +63,12 @@ public class DatabaseConfiguration {
     ) throws IOException {
         Path idFilePath = Files.createTempFile(databaseDirectory, idFile);
         return new IdService(idFilePath, filesService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "invoicing.database", havingValue = "mongo")
+    public Database mongoDatabase() {
+        return new MongoDatabase(MongoClients.create());
     }
 
 }
