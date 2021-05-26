@@ -34,7 +34,7 @@ class InvoiceControllerIntegrationTest extends AbstractControllerTest {
 
         then:
         invoices.size() == numberOfInvoices
-        invoices == expectedInvoices
+        invoices.toString() == expectedInvoices.toString()
     }
 
     def "correct invoice is returned when getting by id"() {
@@ -110,12 +110,12 @@ class InvoiceControllerIntegrationTest extends AbstractControllerTest {
         )
                 .andExpect(status().isNoContent())
 
-        getInvoiceById(id) == updatedInvoice
+        getInvoiceById(id).toString() == updatedInvoice.toString()
     }
 
     def "invoice can be deleted"() {
         given:
-        def invoices = addUniqueInvoices(69)
+        def invoices = addUniqueInvoices(44)
 
         expect:
         invoices.each { invoice -> deleteInvoice(invoice.getId()) }

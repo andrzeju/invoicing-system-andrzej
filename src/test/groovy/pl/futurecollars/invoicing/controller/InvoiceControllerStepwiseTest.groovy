@@ -34,7 +34,7 @@ class InvoiceControllerStepwiseTest extends Specification {
     private LocalDate updatedDate = LocalDate.of(2020, 02, 28)
 
     @Shared
-    private int invoiceId
+    private long invoiceId
 
     def "empty array is returned when no invoices were added"() {
         when:
@@ -55,7 +55,7 @@ class InvoiceControllerStepwiseTest extends Specification {
         def invoiceAsJson = jsonService.toJson(originalInvoice)
 
         when:
-        invoiceId = Integer.valueOf(
+        invoiceId = Long.valueOf(
                 mockMvc.perform(
                         post("/invoices")
                                 .content(invoiceAsJson)
