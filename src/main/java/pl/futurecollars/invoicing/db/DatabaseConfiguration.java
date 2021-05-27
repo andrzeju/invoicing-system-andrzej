@@ -1,11 +1,15 @@
 package pl.futurecollars.invoicing.db;
 
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -73,7 +77,16 @@ public class DatabaseConfiguration {
         @Value("${invoicing.database.name}") String databaseName,
         @Value("${invoicing.database.collection}") String collectionName
     ) {
-        MongoClient mongoClient = MongoClients.create();
+        CodecRegistry codecRegistry = CodecRegistries
+            .fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+        MongoClientSettings settings = MongoClientSettings
+                .builder()
+                .codecRegistry(codecRegistry)
+                .build();
+
+        MongoClient mongoClient = MongoClients.create(settings);
         return new MongoBasedDatabase(
             mongoClient
                 .getDatabase(databaseName)
