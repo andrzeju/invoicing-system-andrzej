@@ -2,3 +2,4 @@ invoicing:
   database: mongo
   database.name: invoices
   database.collection: invoices
+  database.counter.collection: counter
