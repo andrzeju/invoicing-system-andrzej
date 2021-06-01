@@ -2,7 +2,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: mongo
+    active: memory
   flyway:
     enabled: false
 
