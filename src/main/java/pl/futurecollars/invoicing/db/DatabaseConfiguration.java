@@ -24,6 +24,7 @@ import pl.futurecollars.invoicing.db.memory.InMemoryDatabase;
 import pl.futurecollars.invoicing.db.mongo.MongoBasedDatabase;
 import pl.futurecollars.invoicing.db.mongo.MongoIdProvider;
 import pl.futurecollars.invoicing.db.sql.SqlDatabase;
+import pl.futurecollars.invoicing.model.Company;
 import pl.futurecollars.invoicing.model.Invoice;
 import pl.futurecollars.invoicing.utils.FilesService;
 import pl.futurecollars.invoicing.utils.JsonService;
@@ -45,7 +46,13 @@ public class DatabaseConfiguration {
     @Bean
     @ConditionalOnProperty(name = "invoicing.database", havingValue = "memory")
     public Database inMemoryDatabase() {
-        log.info("InMemory database created");
+        log.info("InMemory invoice database created");
+        return new InMemoryDatabase();
+    }
+
+    @Bean
+    public Database<Company> inMemoryCompanyDatabase() {
+        log.info("InMemory company database created");
         return new InMemoryDatabase();
     }
 
