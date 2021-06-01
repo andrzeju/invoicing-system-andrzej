@@ -24,6 +24,7 @@ public class SpringFoxConfig {
             .apiInfo(customApiInfo())
             .tags(
                 new Tag("invoice-controller", "Used to create,add,update,delete invoices"),
+                new Tag("company-controller", "Used to create,add,update,delete companies"),
                 new Tag("taxes-controller", "Used to calculate taxes")
             );
     }
