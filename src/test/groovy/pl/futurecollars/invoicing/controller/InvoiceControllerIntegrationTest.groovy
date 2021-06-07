@@ -6,6 +6,7 @@ import spock.lang.Unroll
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import static pl.futurecollars.invoicing.TestHelpers.invoice
+import static pl.futurecollars.invoicing.TestHelpers.resetIds
 
 @Unroll
 class InvoiceControllerIntegrationTest extends AbstractControllerTest {
@@ -34,7 +35,7 @@ class InvoiceControllerIntegrationTest extends AbstractControllerTest {
 
         then:
         invoices.size() == numberOfInvoices
-        invoices.toString() == expectedInvoices.toString()
+        resetIds(invoices) == resetIds(expectedInvoices)
     }
 
     def "correct invoice is returned when getting by id"() {
@@ -46,7 +47,7 @@ class InvoiceControllerIntegrationTest extends AbstractControllerTest {
         def invoice = getInvoiceById(verifiedInvoice.getId())
 
         then:
-        invoice == verifiedInvoice
+        resetIds(invoice) == resetIds(verifiedInvoice)
     }
 
     def "404 is returned when invoice id is not found when getting invoice by id [#id]"() {
@@ -105,12 +106,12 @@ class InvoiceControllerIntegrationTest extends AbstractControllerTest {
         expect:
         mockMvc.perform(
                 put("$INVOICE_ENDPOINT/$id")
-                        .content(jsonService.toJson(updatedInvoice))
+                        .content(jsonService.toJson(resetIds(updatedInvoice)))
                         .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isNoContent())
 
-        getInvoiceById(id).toString() == updatedInvoice.toString()
+        resetIds(getInvoiceById(id)).toString() == resetIds(updatedInvoice).toString()
     }
 
     def "invoice can be deleted"() {
