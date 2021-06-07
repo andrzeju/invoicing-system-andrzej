@@ -85,10 +85,6 @@ task testWithSqlDatabase(type: Test) {
     systemProperty 'spring.profiles.active', 'sql'
 }
 
-task testWithPostgreSqlDatabase(type: Test) { // only for local use
-    systemProperty 'spring.profiles.active', 'sql-pg'
-}
-
 task testWithJpaDatabase(type: Test) {
     systemProperty 'spring.profiles.active', 'jpa'
 }
@@ -112,30 +108,38 @@ jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
 
+jacocoTestReport {
+    executionData tasks.withType(Test)
+    dependsOn check
+}
+
 jacoco {
     toolVersion = "0.8.6"
 }
+
+var jacocoExcludeList = ['pl/futurecollars/invoicing/App.class',
+                         'pl/futurecollars/invoicing/db/file/FileDatabaseConfiguration.class',
+                         'pl/futurecollars/invoicing/db/mongo/MongoDatabaseConfiguration.class',
+]
 
 jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
                 counter = 'BRANCH'
-                minimum = 0.83
+                minimum = 0.80
             }
         }
         rule {
             limit {
                 counter = 'LINE'
-                minimum = 0.83
+                minimum = 0.80
             }
         }
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude:
-                    ['pl/futurecollars/invoicing/App.class'
-                    ])
+            fileTree(dir: it, exclude: jacocoExcludeList)
         }))
     }
 }
@@ -143,9 +147,7 @@ jacocoTestCoverageVerification {
 jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude:
-                    ['pl/futurecollars/invoicing/App.class'
-                    ])
+            fileTree(dir: it, exclude: jacocoExcludeList)
         }))
     }
 }
