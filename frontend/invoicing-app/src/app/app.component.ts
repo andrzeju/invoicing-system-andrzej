@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Company } from './company'
+import { CompanyService } from './company.service';
 
 @Component({
   selector: 'app-root',
@@ -9,19 +10,65 @@ import { Company } from './company'
 export class AppComponent {
   title = 'Invoicing App';
 
-  newCompany = new Company("", "", "", 0, 0);
+  newCompany : Company = new Company(0, "", "", "", 0, 0);
+  companies : Company[] = [];
 
-  createNewCompany(company: Company) {
-      this.companies.push(company);
-      this.newCompany = new Company("", "", "", 0, 0);
-  }
+  constructor(
+    private companiesService: CompanyService
+) {
+}
 
-  deleteCompany(company: Company) {
-    this.companies = this.companies.filter(comp => comp !== company);
-  }
+ngOnInit(): void {
+    this.companiesService.getCompanies()
+        .subscribe((companies: Company[]) => {
+            this.companies = companies;
+        });
+}
 
-  companies: Company[] = [
-    new Company("555-555-55-55", "Autosan S.A.", "Puławska 22, 22-222 Warszawa", 222.22, 111.11),
-    new Company("444-444-44-44", "Agito S.A.", "Piłsudskiego 44, 22-222 Warszawa", 555.22, 123.11)
-  ];
+addCompany() {
+    this.companiesService.addCompany(this.newCompany)
+        .subscribe((id: number) => {
+            this.newCompany.id = id;
+            this.companies.push(this.newCompany);
+
+            this.newCompany = new Company(0, "", "", "", 0, 0);
+        });
+}
+
+deleteCompany(companyToDelete: Company) {
+    this.companiesService.deleteCompany(companyToDelete.id)
+        .subscribe(() => {
+            this.companies = this.companies.filter(company => company !== companyToDelete);
+        })
+}
+
+triggerUpdate(company: Company) {
+    company.editedCompany = new Company(
+        company.id,
+        company.taxIdentificationNumber,
+        company.address,
+        company.name,
+        company.healthInsurance,
+        company.pensionInsurance
+    )
+
+    company.editMode = true
+}
+
+cancelCompanyUpdate(company: Company) {
+    company.editMode = false;
+}
+
+updateCompany(updatedCompany: Company) {
+    this.companiesService.editCompany(updatedCompany.editedCompany)
+        .subscribe(() => {
+            updatedCompany.taxIdentificationNumber = updatedCompany.editedCompany.taxIdentificationNumber
+            updatedCompany.address = updatedCompany.editedCompany.address
+            updatedCompany.name = updatedCompany.editedCompany.name
+            updatedCompany.healthInsurance = updatedCompany.editedCompany.healthInsurance
+            updatedCompany.pensionInsurance = updatedCompany.editedCompany.pensionInsurance
+
+            updatedCompany.editMode = false;
+        })
+}
 }
