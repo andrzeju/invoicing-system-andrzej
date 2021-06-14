@@ -17,5 +17,14 @@ Company list:
       <td>{{company.name}}</td>
       <td>{{company.healthInsurance}}</td>
       <td>{{company.pensionInsurance}}</td>
+      <td><input (click)="deleteCompany(company)" type="button" class="btn btn-primary" value="Delete"></td>
+  </tr>
+  <tr>
+    <td><input [(ngModel)]="newCompany.taxIdentificationNumber" type="text" class="form-control" name="taxIdentificationNumber"></td>
+    <td><input [(ngModel)]="newCompany.name" type="text" class="form-control" name="name"></td>
+    <td><input [(ngModel)]="newCompany.address" type="text" class="form-control" name="address"></td>
+    <td><input [(ngModel)]="newCompany.pensionInsurance" type="text" class="form-control" name="pensionInsurance"></td>
+    <td><input [(ngModel)]="newCompany.healthInsurance" type="text" class="form-control" name="healthInsurance"></td>
+    <td><input (click)="createNewCompany(newCompany)" type="submit" class="btn btn-primary" value="Create company"></td>
   </tr>
 </table>

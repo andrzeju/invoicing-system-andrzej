@@ -7,7 +7,18 @@ import { Company } from './company'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'invoicing-app';
+  title = 'Invoicing App';
+
+  newCompany = new Company("", "", "", 0, 0);
+
+  createNewCompany(company: Company) {
+      this.companies.push(company);
+      this.newCompany = new Company("", "", "", 0, 0);
+  }
+
+  deleteCompany(company: Company) {
+    this.companies = this.companies.filter(comp => comp !== company);
+  }
 
   companies: Company[] = [
     new Company("555-555-55-55", "Autosan S.A.", "Puławska 22, 22-222 Warszawa", 222.22, 111.11),
