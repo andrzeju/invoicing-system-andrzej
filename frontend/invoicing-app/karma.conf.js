@@ -37,6 +37,9 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
+    files: [
+      './node_modules/bootstrap/dist/css/bootstrap.min.css'
+    ],
     browsers: ['Chrome'],
     singleRun: false,
     restartOnFileChange: true
