@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.test.web.servlet.MockMvc
 import pl.futurecollars.invoicing.controller.taxes.TaxCalculationResult
 import pl.futurecollars.invoicing.model.Company
@@ -16,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static pl.futurecollars.invoicing.TestHelpers.company
 import static pl.futurecollars.invoicing.TestHelpers.invoice
 
+@WithMockUser
 @AutoConfigureMockMvc
 @SpringBootTest
 class AbstractControllerTest extends Specification {
@@ -49,6 +52,7 @@ class AbstractControllerTest extends Specification {
                         post(endpoint)
                                 .content(jsonService.toJson(item))
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                         .andExpect(status().isOk())
                         .andReturn()
@@ -92,12 +96,14 @@ class AbstractControllerTest extends Specification {
     }
 
     void deleteInvoice(long id) {
-        mockMvc.perform(delete("$INVOICE_ENDPOINT/$id"))
+        mockMvc.perform(delete("$INVOICE_ENDPOINT/$id")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isNoContent())
     }
 
     void deleteCompany(long id) {
-        mockMvc.perform(delete("$COMPANY_ENDPOINT/$id"))
+        mockMvc.perform(delete("$COMPANY_ENDPOINT/$id")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isNoContent())
     }
 
@@ -132,6 +138,7 @@ class AbstractControllerTest extends Specification {
                 post("$TAX_CALCULATOR_ENDPOINT")
                     .content(jsonService.toJson(company))
                     .contentType(MediaType.APPLICATION_JSON)
+                    .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                 .andExpect(status().isOk())
                 .andReturn()

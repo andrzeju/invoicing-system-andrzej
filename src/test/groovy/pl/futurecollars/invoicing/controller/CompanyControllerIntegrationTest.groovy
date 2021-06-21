@@ -1,6 +1,7 @@
 package pl.futurecollars.invoicing.controller
 
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import spock.lang.Unroll
 import static pl.futurecollars.invoicing.TestHelpers.company
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
@@ -67,6 +68,7 @@ class CompanyControllerIntegrationTest extends AbstractControllerTest {
         expect:
         mockMvc.perform(
                 delete("$COMPANY_ENDPOINT/$id")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
         )
                 .andExpect(status().isNotFound())
 
@@ -83,6 +85,7 @@ class CompanyControllerIntegrationTest extends AbstractControllerTest {
                 put("$COMPANY_ENDPOINT/$id")
                         .content(companyAsJson(1))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
         )
                 .andExpect(status().isNotFound())
 
@@ -101,6 +104,7 @@ class CompanyControllerIntegrationTest extends AbstractControllerTest {
                 put("$COMPANY_ENDPOINT/$id")
                         .content(jsonService.toJson(updatedCompany))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
         )
                 .andExpect(status().isNoContent())
 

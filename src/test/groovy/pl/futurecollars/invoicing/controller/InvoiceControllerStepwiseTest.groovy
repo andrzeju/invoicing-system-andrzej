@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.test.web.servlet.MockMvc
 import pl.futurecollars.invoicing.TestHelpers
 import pl.futurecollars.invoicing.db.Database
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import static pl.futurecollars.invoicing.TestHelpers.resetIds
 
+@WithMockUser
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Stepwise
@@ -77,6 +80,7 @@ class InvoiceControllerStepwiseTest extends Specification {
                         post("/invoices")
                                 .content(invoiceAsJson)
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                         .andExpect(status().isOk())
                         .andReturn()
@@ -137,6 +141,7 @@ class InvoiceControllerStepwiseTest extends Specification {
                 put("/invoices/$invoiceId")
                         .content(invoiceAsJson)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
         )
                 .andExpect(status().isNoContent())
     }
@@ -162,11 +167,13 @@ class InvoiceControllerStepwiseTest extends Specification {
 
     def "invoice can be deleted"() {
         expect:
-        mockMvc.perform(delete("/invoices/$invoiceId"))
+        mockMvc.perform(delete("/invoices/$invoiceId")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isNoContent())
 
         and:
-        mockMvc.perform(delete("/invoices/$invoiceId"))
+        mockMvc.perform(delete("/invoices/$invoiceId")
+                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().isNotFound())
 
         and:

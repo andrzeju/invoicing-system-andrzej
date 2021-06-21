@@ -5,6 +5,10 @@ spring:
     active: memory
   flyway:
     enabled: false
+  security:
+    user:
+      name: andrzej
+      password: securePassword
 
 server:
   port: 8080
