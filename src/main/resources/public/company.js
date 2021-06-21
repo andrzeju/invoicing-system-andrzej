@@ -44,7 +44,7 @@ function handleAddCompanyFormSubmit() {
                 loadCompanies()
             },
             error: function (jqXhr, textStatus, errorThrown) {
-                alert(errorThrown)
+                alert(errorThrown + ' ' + jqXhr.status)
             }
         });
     });
