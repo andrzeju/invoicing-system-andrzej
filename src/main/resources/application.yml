@@ -19,3 +19,8 @@ logging:
     pl:
       futurecollars:
         invoicing: DEBUG
+
+invoicing:
+  allowedOrigins: http://localhost:4200
+  csrf:
+    disable: true
